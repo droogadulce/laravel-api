@@ -23,4 +23,15 @@ class PostControllerTest extends TestCase
 
         $this->assertDatabaseHas('posts', ['title' => 'The test post']);
     }
+
+    public function test_validate_title()
+    {
+        $response = $this->json('POST', '/api/posts', [
+            'title' => ''
+        ]);
+        
+        // HTTP 422 - Unprocessable Entity
+        $response->assertStatus(422) 
+            ->assertJsonValidationErrors('title');
+    }
 }
